@@ -1,0 +1,20 @@
+name,category,price,rating,stock,wireless,battery_hours,brand,color,image_url,description
+SonicBeat Air 40,headphones,2499.00,4.5,42,true,40,SonicBeat,Midnight Black,https://cdn.commercepilot.test/img/sonicbeat-air-40.jpg,Wireless over-ear headphones with 40-hour battery life and plush memory-foam cushions.
+Pulse ANC Pro,headphones,2999.00,4.6,18,true,35,SonicBeat,Pearl White,https://cdn.commercepilot.test/img/pulse-anc-pro.jpg,Premium wireless headphones with hybrid active noise cancellation and 35-hour battery.
+BassLite 30,headphones,1799.00,4.2,55,true,30,BassLite,Charcoal,https://cdn.commercepilot.test/img/basslite-30.jpg,Affordable wireless headphones tuned for deep bass and 30-hour playback.
+SoundMax Studio,headphones,4999.00,4.7,12,true,45,SoundMax,Matte Black,https://cdn.commercepilot.test/img/soundmax-studio.jpg,Studio-grade over-ear headphones with detachable boom mic and 45-hour battery.
+EchoBuds Mini,earbuds,1499.00,4.3,80,true,24,EchoBuds,Sky Blue,https://cdn.commercepilot.test/img/echobuds-mini.jpg,Compact true-wireless earbuds with hybrid ANC and 24-hour total battery with case.
+EchoBuds Pro,earbuds,3299.00,4.5,35,true,30,EchoBuds,Graphite,https://cdn.commercepilot.test/img/echobuds-pro.jpg,Premium true-wireless earbuds with adaptive ANC and spatial audio support.
+FitTrack Pro,smartwatch,3499.00,4.4,30,true,168,FitTrack,Slate Grey,https://cdn.commercepilot.test/img/fittrack-pro.jpg,Smart fitness watch with heart-rate tracking, GPS and 7-day battery life.
+FitTrack Lite,smartwatch,1999.00,4.1,45,true,240,FitTrack,Rose Gold,https://cdn.commercepilot.test/img/fittrack-lite.jpg,Entry-level fitness watch with step counter, sleep tracking and 10-day battery.
+PulseWatch Ultra,smartwatch,5999.00,4.6,20,true,72,PulseWatch,Titanium,https://cdn.commercepilot.test/img/pulsewatch-ultra.jpg,Flagship smartwatch with AMOLED display, ECG and 3-day always-on battery.
+PowerCore 20K,powerbank,1499.00,4.5,60,false,,PowerCore,Black,https://cdn.commercepilot.test/img/powercore-20k.jpg,20000mAh portable power bank with 22.5W fast charging and dual USB-C ports.
+PowerCore Mag 10K,powerbank,2299.00,4.4,40,false,,PowerCore,White,https://cdn.commercepilot.test/img/powercore-mag-10k.jpg,Magnetic 10000mAh wireless power bank with MagSafe-compatible alignment.
+KeyPro Mechanical,keyboard,2899.00,4.6,25,true,72,KeyPro,Black,https://cdn.commercepilot.test/img/keypro-mechanical.jpg,Mechanical keyboard with hot-swappable switches, per-key RGB and 72-hour battery.
+KeyPro TKL,keyboard,1999.00,4.3,50,true,180,KeyPro,Cream,https://cdn.commercepilot.test/img/keypro-tkl.jpg,Tenkeyless wireless mechanical keyboard with low-profile switches.
+ClickMaster Wireless,mouse,999.00,4.3,80,true,720,ClickMaster,Grey,https://cdn.commercepilot.test/img/clickmaster-wireless.jpg,Ergonomic wireless mouse designed for productivity with 30-day battery life.
+ClickMaster Pro,mouse,1799.00,4.5,55,true,480,ClickMaster,Black,https://cdn.commercepilot.test/img/clickmaster-pro.jpg,High-precision wireless gaming mouse with 26000 DPI sensor and 20-day battery.
+StreamCam HD,webcam,2499.00,4.4,30,true,,StreamCam,Black,https://cdn.commercepilot.test/img/streamcam-hd.jpg,1080p60 streaming webcam with auto-focus and built-in noise-cancelling mic.
+StreamCam 4K,webcam,5499.00,4.6,15,true,,StreamCam,Black,https://cdn.commercepilot.test/img/streamcam-4k.jpg,4K HDR streaming webcam with AI auto-framing and USB-C connectivity.
+USBCHub Pro 7-in-1,accessory,1799.00,4.5,40,false,,HubPro,Silver,https://cdn.commercepilot.test/img/usbchub-pro.jpg,7-in-1 USB-C hub with HDMI 4K, SD/microSD readers and 100W PD passthrough.
+CableKit USB-C,accessory,499.00,4.2,200,false,,HubPro,Black,https://cdn.commercepilot.test/img/cablekit-usbc.jpg,Pack of three braided USB-C cables (1m, 2m, 3m) supporting 100W charging.

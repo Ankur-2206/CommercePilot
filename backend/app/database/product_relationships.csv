@@ -1,0 +1,19 @@
+source_name,related_name,relationship_type,priority
+SonicBeat Air 40,PowerCore 20K,complementary,1
+SonicBeat Air 40,PowerCore Mag 10K,complementary,2
+Pulse ANC Pro,PowerCore 20K,complementary,1
+Pulse ANC Pro,USBCHub Pro 7-in-1,complementary,2
+BassLite 30,CableKit USB-C,complementary,1
+SoundMax Studio,USBCHub Pro 7-in-1,complementary,1
+EchoBuds Mini,PowerCore Mag 10K,complementary,1
+EchoBuds Pro,PowerCore Mag 10K,complementary,1
+FitTrack Pro,ClickMaster Wireless,complementary,1
+FitTrack Pro,PowerCore Mag 10K,complementary,2
+FitTrack Lite,ClickMaster Wireless,complementary,1
+PulseWatch Ultra,ClickMaster Pro,complementary,1
+PulseWatch Ultra,USBCHub Pro 7-in-1,complementary,2
+KeyPro Mechanical,ClickMaster Pro,complementary,1
+KeyPro TKL,ClickMaster Wireless,complementary,1
+StreamCam HD,KeyPro TKL,complementary,1
+StreamCam HD,USBCHub Pro 7-in-1,complementary,2
+StreamCam 4K,USBCHub Pro 7-in-1,complementary,1

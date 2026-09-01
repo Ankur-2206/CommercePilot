@@ -1,0 +1,7 @@
+fastapi==0.128.8
+uvicorn==0.39.0
+SQLAlchemy==2.0.52
+PyMySQL==1.2.0
+python-dotenv==1.2.1
+groq==1.0.0
+razorpay==2.0.1
