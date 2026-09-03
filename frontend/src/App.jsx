@@ -1,4 +1,6 @@
 import { useState, useEffect } from "react";
+import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
 import "./App.css";
 import { API_BASE } from "./config";
 
@@ -685,9 +687,9 @@ function App() {
               CommercePilot
             </h3>
 
-            <p>
+            <ReactMarkdown remarkPlugins={[remarkGfm]}>
               {response}
-            </p>
+            </ReactMarkdown>
 
           </div>
 
