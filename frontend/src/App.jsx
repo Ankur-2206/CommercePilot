@@ -564,6 +564,38 @@ function App() {
 
       </header>
 
+      {/* INPUT */}
+
+      <div className="input-area">
+
+        <input
+          type="text"
+          placeholder="Find wireless headphones under ₹3000..."
+          value={message}
+          onChange={(event) =>
+            setMessage(event.target.value)
+          }
+          onKeyDown={(event) => {
+
+            if (event.key === "Enter") {
+              sendMessage();
+            }
+
+          }}
+        />
+
+
+        <button
+          onClick={sendMessage}
+          disabled={loading}
+        >
+          {loading
+            ? "Thinking..."
+            : "Send"}
+        </button>
+
+      </div>
+
 
       <main className="chat-container">
 
@@ -947,39 +979,6 @@ function App() {
             ))}
           </div>
         )}
-
-
-        {/* INPUT */}
-
-        <div className="input-area">
-
-          <input
-            type="text"
-            placeholder="Find wireless headphones under ₹3000..."
-            value={message}
-            onChange={(event) =>
-              setMessage(event.target.value)
-            }
-            onKeyDown={(event) => {
-
-              if (event.key === "Enter") {
-                sendMessage();
-              }
-
-            }}
-          />
-
-
-          <button
-            onClick={sendMessage}
-            disabled={loading}
-          >
-            {loading
-              ? "Thinking..."
-              : "Send"}
-          </button>
-
-        </div>
 
       </main>
 
