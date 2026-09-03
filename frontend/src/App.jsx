@@ -31,6 +31,7 @@ function App() {
   const [showOrderHistory, setShowOrderHistory] = useState(false);
   const [paymentError, setPaymentError] = useState(null);
   const [failedPaymentData, setFailedPaymentData] = useState(null);
+  const [hasSearched, setHasSearched] = useState(false);
 
   const BACKEND_URL = API_BASE;
 
@@ -41,6 +42,7 @@ function App() {
   const sendMessage = async () => {
     if (!message.trim()) return;
 
+    setHasSearched(true);
     setLoading(true);
     setResponse("");
     setProducts([]);
@@ -657,18 +659,20 @@ function App() {
 
         {/* WELCOME */}
 
-        <div className="welcome">
+        {!hasSearched && (
+          <div className="welcome">
 
-          <h2>
-            What are you looking for?
-          </h2>
+            <h2>
+              What are you looking for?
+            </h2>
 
-          <p>
-            Tell CommercePilot what you want, and our AI agent
-            will find the best products for you.
-          </p>
+            <p>
+              Tell CommercePilot what you want, and our AI agent
+              will find the best products for you.
+            </p>
 
-        </div>
+          </div>
+        )}
 
 
         {/* AI RESPONSE */}
