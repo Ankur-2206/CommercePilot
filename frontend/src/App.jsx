@@ -19,6 +19,51 @@ function getSessionId() {
 
 const SESSION_ID = getSessionId();
 
+const PRODUCT_IMAGE_FALLBACKS = {
+  "SonicBeat Air 40":
+    "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&w=900&q=85",
+  "Pulse ANC Pro":
+    "https://images.unsplash.com/photo-1546435770-a3e426bf472b?auto=format&fit=crop&w=900&q=85",
+  "BassLite 30":
+    "https://images.unsplash.com/photo-1484704849700-f032a568e944?auto=format&fit=crop&w=900&q=85",
+  "SoundMax Studio":
+    "https://images.unsplash.com/photo-1524678606370-a47ad25cb82a?auto=format&fit=crop&w=900&q=85",
+  earbuds:
+    "https://images.unsplash.com/photo-1590658268037-6bf12165a8df?auto=format&fit=crop&w=900&q=85",
+  smartwatch:
+    "https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=900&q=85",
+  keyboard:
+    "https://images.unsplash.com/photo-1587829741301-dc798b83add3?auto=format&fit=crop&w=900&q=85",
+  mouse:
+    "https://images.unsplash.com/photo-1527814050087-3793815479db?auto=format&fit=crop&w=900&q=85",
+  webcam:
+    "https://images.unsplash.com/photo-1587825140708-dfaf72ae4b04?auto=format&fit=crop&w=900&q=85",
+  powerbank:
+    "https://images.unsplash.com/photo-1609592424849-0d8b7d6fcb0a?auto=format&fit=crop&w=900&q=85",
+  accessory:
+    "https://images.unsplash.com/photo-1625842268584-8f3296236761?auto=format&fit=crop&w=900&q=85",
+};
+
+const CATEGORY_ICONS = {
+  headphones: "🎧",
+  earbuds: "🎶",
+  smartwatch: "⌚",
+  keyboard: "⌨️",
+  mouse: "🖱️",
+  webcam: "📷",
+  powerbank: "🔋",
+  accessory: "🔌",
+};
+
+function getProductImage(product) {
+  return (
+    product.image_url ||
+    PRODUCT_IMAGE_FALLBACKS[product.name] ||
+    PRODUCT_IMAGE_FALLBACKS[product.category] ||
+    PRODUCT_IMAGE_FALLBACKS.accessory
+  );
+}
+
 function App() {
   const [message, setMessage] = useState("");
   const [response, setResponse] = useState("");
@@ -710,7 +755,23 @@ function App() {
               >
 
                 <div className="product-image">
-                  🎧
+                  <img
+                    src={getProductImage(product)}
+                    alt={product.name}
+                    onError={(event) => {
+                      const fallback =
+                        PRODUCT_IMAGE_FALLBACKS[product.name] ||
+                        PRODUCT_IMAGE_FALLBACKS[product.category] ||
+                        PRODUCT_IMAGE_FALLBACKS.accessory;
+                      if (event.currentTarget.src !== fallback) {
+                        event.currentTarget.src = fallback;
+                      }
+                    }}
+                  />
+                  <span className="product-category">
+                    {CATEGORY_ICONS[product.category] || "✨"}{" "}
+                    {product.category}
+                  </span>
                 </div>
 
 
