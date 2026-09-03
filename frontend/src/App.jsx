@@ -19,6 +19,58 @@ function getSessionId() {
 
 const SESSION_ID = getSessionId();
 
+const PRODUCT_IMAGE_FALLBACKS = {
+  "SonicBeat Air 40":
+    "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&w=900&q=85",
+  "Pulse ANC Pro":
+    "https://images.unsplash.com/photo-1546435770-a3e426bf472b?auto=format&fit=crop&w=900&q=85",
+  "BassLite 30":
+    "https://images.unsplash.com/photo-1484704849700-f032a568e944?auto=format&fit=crop&w=900&q=85",
+  "SoundMax Studio":
+    "https://images.unsplash.com/photo-1524678606370-a47ad25cb82a?auto=format&fit=crop&w=900&q=85",
+  earbuds:
+    "https://images.unsplash.com/photo-1590658268037-6bf12165a8df?auto=format&fit=crop&w=900&q=85",
+  smartwatch:
+    "https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=900&q=85",
+  keyboard:
+    "https://images.unsplash.com/photo-1587829741301-dc798b83add3?auto=format&fit=crop&w=900&q=85",
+  mouse:
+    "https://images.unsplash.com/photo-1527814050087-3793815479db?auto=format&fit=crop&w=900&q=85",
+  webcam:
+    "https://images.unsplash.com/photo-1587825140708-dfaf72ae4b04?auto=format&fit=crop&w=900&q=85",
+  powerbank:
+    "https://images.unsplash.com/photo-1609592424849-0d8b7d6fcb0a?auto=format&fit=crop&w=900&q=85",
+  accessory:
+    "https://images.unsplash.com/photo-1625842268584-8f3296236761?auto=format&fit=crop&w=900&q=85",
+};
+
+const CATEGORY_ICONS = {
+  headphones: "🎧",
+  earbuds: "🎶",
+  smartwatch: "⌚",
+  keyboard: "⌨️",
+  mouse: "🖱️",
+  webcam: "📷",
+  powerbank: "🔋",
+  accessory: "🔌",
+};
+
+const QUICK_SEARCHES = [
+  { label: "Gaming setup", query: "Find products for a gaming setup", icon: "🎮" },
+  { label: "Work from home", query: "Show me products for a work from home setup", icon: "💼" },
+  { label: "Best audio", query: "Find the best wireless audio products", icon: "🎧" },
+  { label: "Fitness tech", query: "Show me smart fitness products", icon: "⌚" },
+];
+
+function getProductImage(product) {
+  return (
+    product.image_url ||
+    PRODUCT_IMAGE_FALLBACKS[product.name] ||
+    PRODUCT_IMAGE_FALLBACKS[product.category] ||
+    PRODUCT_IMAGE_FALLBACKS.accessory
+  );
+}
+
 function App() {
   const [message, setMessage] = useState("");
   const [response, setResponse] = useState("");
@@ -33,6 +85,7 @@ function App() {
   const [showOrderHistory, setShowOrderHistory] = useState(false);
   const [paymentError, setPaymentError] = useState(null);
   const [failedPaymentData, setFailedPaymentData] = useState(null);
+  const [hasSearched, setHasSearched] = useState(false);
 
   const BACKEND_URL = API_BASE;
 
@@ -40,9 +93,10 @@ function App() {
   // AI AGENT
   // ----------------------------------------
 
-  const sendMessage = async () => {
-    if (!message.trim()) return;
+  const sendMessage = async (searchQuery = message) => {
+    if (!searchQuery.trim()) return;
 
+    setHasSearched(true);
     setLoading(true);
     setResponse("");
     setProducts([]);
@@ -50,7 +104,7 @@ function App() {
     try {
       const response = await fetch(
         `${BACKEND_URL}/api/agent/chat?message=${encodeURIComponent(
-          message
+          searchQuery
         )}`,
         {
           method: "POST",
@@ -659,18 +713,42 @@ function App() {
 
         {/* WELCOME */}
 
-        <div className="welcome">
+        {!hasSearched && (
+          <div className="welcome">
 
-          <h2>
-            What are you looking for?
-          </h2>
+            <h2>
+              Shop smarter with CommercePilot
+            </h2>
 
-          <p>
-            Tell CommercePilot what you want, and our AI agent
-            will find the best products for you.
-          </p>
+            <p>
+              Discover products across audio, gaming, fitness, workspaces, and more.
+              Try one of these popular searches or describe exactly what you need.
+            </p>
 
-        </div>
+            <div className="quick-searches">
+              {QUICK_SEARCHES.map((suggestion) => (
+                <button
+                  key={suggestion.label}
+                  type="button"
+                  onClick={() => {
+                    setMessage(suggestion.query);
+                    sendMessage(suggestion.query);
+                  }}
+                  disabled={loading}
+                >
+                  <span>{suggestion.icon}</span>
+                  {suggestion.label}
+                </button>
+              ))}
+            </div>
+
+            <div className="store-highlights">
+              <span><strong>21+</strong> curated products</span>
+              <span><strong>8</strong> categories</span>
+              <span><strong>Secure</strong> Razorpay checkout</span>
+            </div>
+          </div>
+        )}
 
 
         {/* AI RESPONSE */}
@@ -706,7 +784,23 @@ function App() {
               >
 
                 <div className="product-image">
-                  🎧
+                  <img
+                    src={getProductImage(product)}
+                    alt={product.name}
+                    onError={(event) => {
+                      const fallback =
+                        PRODUCT_IMAGE_FALLBACKS[product.name] ||
+                        PRODUCT_IMAGE_FALLBACKS[product.category] ||
+                        PRODUCT_IMAGE_FALLBACKS.accessory;
+                      if (event.currentTarget.src !== fallback) {
+                        event.currentTarget.src = fallback;
+                      }
+                    }}
+                  />
+                  <span className="product-category">
+                    {CATEGORY_ICONS[product.category] || "✨"}{" "}
+                    {product.category}
+                  </span>
                 </div>
 
 
