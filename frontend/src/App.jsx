@@ -27,6 +27,12 @@ function App() {
   const [loading, setLoading] = useState(false);
   const [checkoutLoading, setCheckoutLoading] = useState(false);
   const [order, setOrder] = useState(null);
+  const [error, setError] = useState(null);
+  const [success, setSuccess] = useState(null);
+  const [orderHistory, setOrderHistory] = useState([]);
+  const [showOrderHistory, setShowOrderHistory] = useState(false);
+  const [paymentError, setPaymentError] = useState(null);
+  const [failedPaymentData, setFailedPaymentData] = useState(null);
 
   const BACKEND_URL = API_BASE;
 
@@ -59,12 +65,10 @@ function App() {
 
       setResponse(data.message);
       setProducts(data.products || []);
+      setError(null);
     } catch (error) {
       console.error("AI agent error:", error);
-
-      setResponse(
-        "Sorry, something went wrong while communicating with CommercePilot."
-      );
+      setError("Sorry, something went wrong while communicating with CommercePilot.");
     } finally {
       setLoading(false);
     }
@@ -89,6 +93,28 @@ function App() {
       setCart(data.items || []);
     } catch (error) {
       console.error("Load cart error:", error);
+    }
+  };
+
+  // ----------------------------------------
+  // LOAD ORDER HISTORY
+  // ----------------------------------------
+
+  const loadOrderHistory = async () => {
+    try {
+      const response = await fetch(
+        `${BACKEND_URL}/api/payment/orders?session_id=${SESSION_ID}`
+      );
+
+      if (!response.ok) {
+        throw new Error("Failed to load order history");
+      }
+
+      const data = await response.json();
+      setOrderHistory(data.orders || []);
+    } catch (error) {
+      console.error("Load order history error:", error);
+      setError("Could not load order history");
     }
   };
 
@@ -356,11 +382,15 @@ function App() {
               order_id: verifyData.order_id,
               total_amount: verifyData.total_amount,
               status: verifyData.status,
+              items: verifyData.items,
+              created_at: verifyData.created_at,
             });
 
             setResponse(
               "Payment successful! Your order has been confirmed."
             );
+            setSuccess("Thank you for your purchase! Order details are shown above.");
+            setPaymentError(null);
 
             // ----------------------------------------
             // STEP 6
@@ -375,9 +405,14 @@ function App() {
               error
             );
 
-            alert(
-              "Payment was completed, but verification failed. Please contact support."
+            setPaymentError(
+              `Payment verification failed: ${error.message}. Please contact support or try again.`
             );
+            setFailedPaymentData({
+              razorpay_payment_id: paymentResponse.razorpay_payment_id,
+              razorpay_order_id: paymentResponse.razorpay_order_id,
+              razorpay_signature: paymentResponse.razorpay_signature,
+            });
           } finally {
             setCheckoutLoading(false);
           }
@@ -415,11 +450,11 @@ function App() {
             paymentFailure.error
           );
 
-          alert(
+          setPaymentError(
             `Payment failed: ${
               paymentFailure.error?.description ||
               "Unknown error"
-            }`
+            }. You can try again.`
           );
 
           setCheckoutLoading(false);
@@ -436,7 +471,7 @@ function App() {
     } catch (error) {
       console.error("Checkout error:", error);
 
-      alert(
+      setError(
         error.message ||
           "Unable to start payment. Please check your backend and Razorpay configuration."
       );
@@ -444,6 +479,61 @@ function App() {
       setCheckoutLoading(false);
     }
   };
+
+  // ----------------------------------------
+  // RETRY PAYMENT
+  // ----------------------------------------
+
+  const retryPayment = async () => {
+    if (!failedPaymentData) return;
+
+    setCheckoutLoading(true);
+    setPaymentError(null);
+
+    try {
+      const verifyResponse = await fetch(
+        `${BACKEND_URL}/api/payment/verify`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            session_id: SESSION_ID,
+            razorpay_order_id: failedPaymentData.razorpay_order_id,
+            razorpay_payment_id: failedPaymentData.razorpay_payment_id,
+            razorpay_signature: failedPaymentData.razorpay_signature,
+          }),
+        }
+      );
+
+      if (!verifyResponse.ok) {
+        const errorData = await verifyResponse.json().catch(() => null);
+        throw new Error(errorData?.detail || "Payment verification failed");
+      }
+
+      const verifyData = await verifyResponse.json();
+
+      setOrder({
+        order_id: verifyData.order_id,
+        total_amount: verifyData.total_amount,
+        status: verifyData.status,
+      });
+
+      setSuccess("Payment verified successfully! Order confirmed.");
+      setPaymentError(null);
+      setFailedPaymentData(null);
+      setResponse("Payment successful! Your order has been confirmed.");
+
+      await loadCart();
+    } catch (error) {
+      console.error("Retry payment error:", error);
+      setPaymentError(`Retry failed: ${error.message}`);
+    } finally {
+      setCheckoutLoading(false);
+    }
+  };
+
 
   // ----------------------------------------
   // CART TOTAL
@@ -476,8 +566,96 @@ function App() {
 
       </header>
 
+      {/* INPUT */}
+
+      <div className="input-area">
+
+        <input
+          type="text"
+          placeholder="Find wireless headphones under ₹3000..."
+          value={message}
+          onChange={(event) =>
+            setMessage(event.target.value)
+          }
+          onKeyDown={(event) => {
+
+            if (event.key === "Enter") {
+              sendMessage();
+            }
+
+          }}
+        />
+
+
+        <button
+          onClick={sendMessage}
+          disabled={loading}
+        >
+          {loading
+            ? "Thinking..."
+            : "Send"}
+        </button>
+
+      </div>
+
 
       <main className="chat-container">
+
+        {/* ERROR ALERT */}
+
+        {error && (
+          <div className="alert alert-error">
+            <span>❌ {error}</span>
+            <button
+              onClick={() => setError(null)}
+              className="close-btn"
+            >
+              ✕
+            </button>
+          </div>
+        )}
+
+        {/* SUCCESS ALERT */}
+
+        {success && (
+          <div className="alert alert-success">
+            <span>✅ {success}</span>
+            <button
+              onClick={() => setSuccess(null)}
+              className="close-btn"
+            >
+              ✕
+            </button>
+          </div>
+        )}
+
+        {/* PAYMENT ERROR ALERT */}
+
+        {paymentError && (
+          <div className="alert alert-error">
+            <div>
+              <p>⚠️ {paymentError}</p>
+              {failedPaymentData && (
+                <button
+                  onClick={retryPayment}
+                  disabled={checkoutLoading}
+                  className="retry-btn"
+                >
+                  {checkoutLoading ? "Retrying..." : "Retry Payment"}
+                </button>
+              )}
+            </div>
+            <button
+              onClick={() => {
+                setPaymentError(null);
+                setFailedPaymentData(null);
+              }}
+              className="close-btn"
+            >
+              ✕
+            </button>
+          </div>
+        )}
 
         {/* WELCOME */}
 
@@ -707,63 +885,102 @@ function App() {
 
         {order && (
 
-          <div className="response">
+          <div className="order-success">
 
-            <h3>
-              ✅ Payment Successful
-            </h3>
+            <div className="order-header">
+              <h3>✅ Order Confirmed</h3>
+              <p className="order-id">Order #{order.order_id}</p>
+            </div>
 
+            <div className="order-details">
+              <div className="detail-row">
+                <span>Status:</span>
+                <strong>{order.status.toUpperCase()}</strong>
+              </div>
+              
+              <div className="detail-row">
+                <span>Total Amount:</span>
+                <strong>₹{order.total_amount.toFixed(2)}</strong>
+              </div>
 
-            <p>
-              Order ID: {order.order_id}
-            </p>
+              {order.created_at && (
+                <div className="detail-row">
+                  <span>Order Date:</span>
+                  <span>{new Date(order.created_at).toLocaleString()}</span>
+                </div>
+              )}
+            </div>
 
-
-            <p>
-              Total: ₹{order.total_amount}
-            </p>
-
-
-            <p>
-              Status: {order.status}
-            </p>
+            <div className="order-actions">
+              <button
+                onClick={() => {
+                  setOrder(null);
+                  setMessage("");
+                  setResponse("");
+                }}
+              >
+                Continue Shopping
+              </button>
+              
+              <button
+                onClick={() => {
+                  loadOrderHistory();
+                  setShowOrderHistory(true);
+                }}
+              >
+                View Order History
+              </button>
+            </div>
 
           </div>
+
 
         )}
 
 
-        {/* INPUT */}
+        {/* ORDER HISTORY */}
 
-        <div className="input-area">
+        {showOrderHistory && orderHistory.length > 0 && (
+          <div className="order-history">
+            <div className="order-history-header">
+              <h3>📜 Order History</h3>
+              <button
+                onClick={() => setShowOrderHistory(false)}
+                className="close-btn"
+              >
+                ✕
+              </button>
+            </div>
 
-          <input
-            type="text"
-            placeholder="Find wireless headphones under ₹3000..."
-            value={message}
-            onChange={(event) =>
-              setMessage(event.target.value)
-            }
-            onKeyDown={(event) => {
+            {orderHistory.map((historyOrder) => (
+              <div key={historyOrder.order_id} className="history-item">
+                <div className="history-header">
+                  <strong>Order #{historyOrder.order_id}</strong>
+                  <span className="status-badge">{historyOrder.status}</span>
+                </div>
 
-              if (event.key === "Enter") {
-                sendMessage();
-              }
+                <div className="history-details">
+                  <span>₹{historyOrder.total_amount.toFixed(2)}</span>
+                  <span className="date">
+                    {new Date(historyOrder.created_at).toLocaleDateString()}
+                  </span>
+                </div>
 
-            }}
-          />
-
-
-          <button
-            onClick={sendMessage}
-            disabled={loading}
-          >
-            {loading
-              ? "Thinking..."
-              : "Send"}
-          </button>
-
-        </div>
+                {historyOrder.items.length > 0 && (
+                  <div className="history-items">
+                    {historyOrder.items.map((item, idx) => (
+                      <div key={idx} className="history-item-detail">
+                        <span>{item.product_name}</span>
+                        <span>×{item.quantity}</span>
+                        <span>₹{(item.price * item.quantity).toFixed(2)}</span>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+            ))}
+          </div>
+        )}
 
       </main>
 

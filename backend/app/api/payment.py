@@ -234,3 +234,40 @@ def verify_payment(payload: VerifyPaymentRequest, db: Session = Depends(get_db))
         "total_amount": float(order.total_amount),
         "status": order.status,
     }
+
+
+@router.get("/orders")
+def get_orders(session_id: str, db: Session = Depends(get_db)):
+    """Retrieve all orders for a session with their items."""
+    try:
+        orders = db.query(Order).filter(Order.session_id == session_id).order_by(Order.created_at.desc()).all()
+        
+        result = []
+        for order in orders:
+            items = db.query(OrderItem).filter(OrderItem.order_id == order.id).all()
+            
+            order_items = []
+            for item in items:
+                product = db.query(Product).filter(Product.id == item.product_id).first()
+                order_items.append({
+                    "product_id": item.product_id,
+                    "product_name": product.name if product else "Unknown Product",
+                    "quantity": item.quantity,
+                    "price": float(item.price),
+                })
+            
+            result.append({
+                "order_id": order.id,
+                "total_amount": float(order.total_amount),
+                "status": order.status,
+                "created_at": order.created_at.isoformat() if order.created_at else None,
+                "items": order_items,
+            })
+        
+        return {
+            "orders": result,
+            "count": len(result),
+        }
+    
+    except Exception as error:
+        raise HTTPException(status_code=500, detail="Could not retrieve orders") from error
