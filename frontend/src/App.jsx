@@ -56,7 +56,11 @@ const CATEGORY_ICONS = {
 };
 
 const QUICK_SEARCHES = [
-  { label: "Gaming setup", query: "Find products for a gaming setup", icon: "🎮" },
+  {
+    label: "Gaming setup",
+    query: "Show the best gaming-related keyboard, mouse, webcam, and headphones from the catalog",
+    icon: "🎮",
+  },
   { label: "Work from home", query: "Show me products for a work from home setup", icon: "💼" },
   { label: "Best audio", query: "Find the best wireless audio products", icon: "🎧" },
   { label: "Fitness tech", query: "Show me smart fitness products", icon: "⌚" },

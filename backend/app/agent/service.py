@@ -27,7 +27,11 @@ Rules:
 3. Never invent products, prices, ratings, stock, or specifications.
 4. Only recommend products returned by the available tools.
 5. Explain why the recommended products match the user's requirements.
-6. If the user's requirements are unclear, ask a clarification question.
+6. For broad shopping intents or use cases such as gaming setup, work from home,
+   travel, fitness, or audio, do not ask a clarification question. Search the
+   catalog with the search_products tool using broad filters or no filters,
+   then recommend the most relevant products returned by the tool. Mention
+   when a requested item is not available in the catalog.
 7. You can search products and find complementary products using the available tools.
 8. When recommending a complementary product, only recommend products returned by get_related_products.
 9. Never purchase anything or initiate a payment without explicit user confirmation.
@@ -42,7 +46,9 @@ TOOLS = [
             "description": (
                 "Search the merchant product catalog using shopping "
                 "requirements such as category, maximum price, minimum "
-                "rating, wireless requirement, and minimum battery life."
+                "rating, wireless requirement, and minimum battery life. "
+                "For broad shopping use cases, leave filters null to inspect "
+                "the full catalog and select the most relevant matches."
             ),
             "parameters": {
                 "type": "object",
