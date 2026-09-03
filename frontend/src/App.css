@@ -10,6 +10,14 @@
 .welcome { margin-top: 18px; padding: 35px 42px; border-radius: 24px; text-align: center; }
 .welcome h2 { margin: 0 0 10px; font-size: 1.55rem; letter-spacing: -.04em; }
 .welcome p { max-width: 540px; margin: 0 auto; color: #aab8d3; line-height: 1.65; }
+.quick-searches { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; margin: 27px auto 22px; max-width: 760px; }
+.quick-searches button { display: flex; align-items: center; justify-content: center; gap: 7px; min-height: 48px; padding: 10px 12px; border: 1px solid rgba(148, 163, 184, .2); border-radius: 12px; background: rgba(255, 255, 255, .045); color: #dbeafe; cursor: pointer; font-size: .78rem; font-weight: 700; transition: border-color 160ms ease, background 160ms ease, transform 160ms ease; }
+.quick-searches button:hover { border-color: rgba(103, 232, 249, .55); background: rgba(34, 211, 238, .1); transform: translateY(-2px); }
+.quick-searches button span { font-size: 1.1rem; }
+.store-highlights { display: flex; justify-content: center; flex-wrap: wrap; gap: 10px 25px; color: #8290aa; font-size: .74rem; }
+.store-highlights span + span { position: relative; }
+.store-highlights span + span::before { position: absolute; top: 50%; left: -14px; width: 4px; height: 4px; border-radius: 50%; background: #67e8f9; content: ""; transform: translateY(-50%); }
+.store-highlights strong { color: #c4b5fd; }
 .response { position: relative; margin-top: 22px; padding: 22px 26px 23px 31px; border-radius: 18px; color: #cfdaee; line-height: 1.65; }
 .response::before { position: absolute; top: 20px; bottom: 20px; left: -1px; width: 4px; border-radius: 4px; background: linear-gradient(#a78bfa, #22d3ee); content: ""; }
 .response h3 { margin: 0 0 7px; color: #f3f0ff; font-size: .95rem; }
@@ -41,7 +49,7 @@
 .cart-total { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding-top: 22px; font-size: 1.12rem; }.cart-total strong { color: #fff; }.cart-total button { padding: 12px 18px; }
 .order-confirmation { margin-top: 26px; padding: 25px 28px; border-color: rgba(52, 211, 153, .32); border-radius: 18px; text-align: center; }.order-confirmation h2 { margin: 0 0 13px; font-size: 1.22rem; }.order-confirmation p { margin: 5px 0; color: #b7c5dc; }.order-confirmation strong { color: #f8fafc; }
 .input-area { position: sticky; top: 16px; display: flex; gap: 10px; margin: 0 auto; padding: 9px; width: min(1160px, calc(100% - 32px)); max-width: 1160px; border: 1px solid rgba(167, 139, 250, .38); border-radius: 16px; background: rgba(11, 16, 32, .92); box-shadow: 0 14px 36px rgba(0, 0, 0, .35), 0 0 0 1px rgba(255, 255, 255, .03) inset; z-index: 999; backdrop-filter: blur(8px); }.input-area input { width: 100%; min-width: 0; padding: 8px 12px; border: 0; outline: 0; background: transparent; color: #f8fafc; font-size: .96rem; }.input-area input::placeholder { color: #8290aa; }.input-area button { min-width: 92px; padding: 11px 23px; }
-@media (max-width: 760px) { .app { width: min(100% - 24px, 600px); padding-top: 34px; }.header { margin-bottom: 28px; }.welcome { padding: 27px 20px; }.products { grid-template-columns: 1fr; gap: 14px; }.product-card { padding: 14px; }.product-image { height: 128px; }.cart { padding: 20px; }.cart-item { align-items: flex-start; }.cart-item > strong { white-space: nowrap; }.cart-total { flex-direction: column; align-items: flex-start; }.cart-total button { width: 100%; }.input-area { top: 12px; width: min(100% - 32px, 600px); }.input-area button { padding: 11px 16px; } }
+@media (max-width: 760px) { .app { width: min(100% - 24px, 600px); padding-top: 34px; }.header { margin-bottom: 28px; }.welcome { padding: 27px 20px; }.quick-searches { grid-template-columns: repeat(2, minmax(0, 1fr)); }.products { grid-template-columns: 1fr; gap: 14px; }.product-card { padding: 14px; }.product-image { height: 128px; }.cart { padding: 20px; }.cart-item { align-items: flex-start; }.cart-item > strong { white-space: nowrap; }.cart-total { flex-direction: column; align-items: flex-start; }.cart-total button { width: 100%; }.input-area { top: 12px; width: min(100% - 32px, 600px); }.input-area button { padding: 11px 16px; } }
 
 /* Alert Messages */
 .alert {

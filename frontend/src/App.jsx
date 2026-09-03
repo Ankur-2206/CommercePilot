@@ -55,6 +55,13 @@ const CATEGORY_ICONS = {
   accessory: "🔌",
 };
 
+const QUICK_SEARCHES = [
+  { label: "Gaming setup", query: "Find products for a gaming setup", icon: "🎮" },
+  { label: "Work from home", query: "Show me products for a work from home setup", icon: "💼" },
+  { label: "Best audio", query: "Find the best wireless audio products", icon: "🎧" },
+  { label: "Fitness tech", query: "Show me smart fitness products", icon: "⌚" },
+];
+
 function getProductImage(product) {
   return (
     product.image_url ||
@@ -86,8 +93,8 @@ function App() {
   // AI AGENT
   // ----------------------------------------
 
-  const sendMessage = async () => {
-    if (!message.trim()) return;
+  const sendMessage = async (searchQuery = message) => {
+    if (!searchQuery.trim()) return;
 
     setHasSearched(true);
     setLoading(true);
@@ -97,7 +104,7 @@ function App() {
     try {
       const response = await fetch(
         `${BACKEND_URL}/api/agent/chat?message=${encodeURIComponent(
-          message
+          searchQuery
         )}`,
         {
           method: "POST",
@@ -710,14 +717,36 @@ function App() {
           <div className="welcome">
 
             <h2>
-              What are you looking for?
+              Shop smarter with CommercePilot
             </h2>
 
             <p>
-              Tell CommercePilot what you want, and our AI agent
-              will find the best products for you.
+              Discover products across audio, gaming, fitness, workspaces, and more.
+              Try one of these popular searches or describe exactly what you need.
             </p>
 
+            <div className="quick-searches">
+              {QUICK_SEARCHES.map((suggestion) => (
+                <button
+                  key={suggestion.label}
+                  type="button"
+                  onClick={() => {
+                    setMessage(suggestion.query);
+                    sendMessage(suggestion.query);
+                  }}
+                  disabled={loading}
+                >
+                  <span>{suggestion.icon}</span>
+                  {suggestion.label}
+                </button>
+              ))}
+            </div>
+
+            <div className="store-highlights">
+              <span><strong>21+</strong> curated products</span>
+              <span><strong>8</strong> categories</span>
+              <span><strong>Secure</strong> Razorpay checkout</span>
+            </div>
           </div>
         )}
 
